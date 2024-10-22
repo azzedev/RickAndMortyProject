@@ -62,6 +62,7 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
     implementation(libs.retrofit)
+    implementation(libs.converter.gson)
     implementation(libs.google.gson)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.ui)
@@ -76,6 +77,8 @@ dependencies {
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.androidx.paging.compose)
+    implementation(libs.coil.kt.coil.compose)
+    implementation(libs.material3)
 
 
     testImplementation(libs.junit)
