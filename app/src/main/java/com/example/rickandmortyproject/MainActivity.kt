@@ -7,16 +7,16 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.navigation.compose.rememberNavController
 import com.example.rickandmortyproject.presentation.ui.NavGraph
+import com.example.rickandmortyproject.ui.theme.RickAndMortyProjectTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val navController = rememberNavController()
-            MaterialTheme {
+            RickAndMortyProjectTheme {
                 Surface {
-                    NavGraph(navController = navController)
-                }
+                    val navController = rememberNavController()
+                    NavGraph(navController = navController)                 }
             }
         }
     }

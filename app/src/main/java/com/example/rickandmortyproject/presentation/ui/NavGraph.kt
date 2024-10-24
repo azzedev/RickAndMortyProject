@@ -16,5 +16,8 @@ fun NavGraph(navController: NavHostController) {
             val characterId = backStackEntry.arguments?.getString("characterId")?.toInt() ?: 1
             CharacterDetailScreen(characterId = characterId)
         }
+        composable("character_list") {
+            CharacterListScreen()
+        }
     }
 }

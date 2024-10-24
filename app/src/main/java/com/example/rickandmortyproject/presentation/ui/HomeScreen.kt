@@ -27,5 +27,12 @@ fun HomeScreen(navController: NavController) {
         ) {
             Text(text = "Voir les détails de Rick Sanchez")
         }
+        Button(
+            onClick = {
+                navController.navigate("character_list")
+            }
+        ) {
+            Text(text = "Voir tous les personnages")
+        }
     }
 }
