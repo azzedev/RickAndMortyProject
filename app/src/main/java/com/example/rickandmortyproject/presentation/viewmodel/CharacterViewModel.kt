@@ -23,6 +23,9 @@ class CharacterViewModel (
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
 
+    private val _errorMessageCharacterList = MutableStateFlow<String?>(null)
+    val errorMessageCharacterList: StateFlow<String?> = _errorMessageCharacterList
+
     fun fetchCharacterById(id: Int) {
         viewModelScope.launch {
             try {
@@ -38,6 +41,7 @@ class CharacterViewModel (
         if (_isLoading.value || page > totalPages) return
 
         _isLoading.value = true
+        _errorMessageCharacterList.value = null
         viewModelScope.launch {
             try {
                 val response = repository.getAllCharacters(page)
@@ -48,8 +52,9 @@ class CharacterViewModel (
                 println("Nombre de personnages récupérés : ${response.results.size} à la page $page")
             } catch (e: Exception) {
                 println("Erreur lors de la récupération des personnages : ${e.message}")
+                _errorMessageCharacterList.value = "GABIDULE n'a pas voulu vous donner ce que vous vouliez"
             } finally {
-                _isLoading.value = false // Terminer le chargement
+                _isLoading.value = false
             }
         }
     }

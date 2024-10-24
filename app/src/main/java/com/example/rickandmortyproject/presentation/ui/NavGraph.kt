@@ -17,7 +17,7 @@ fun NavGraph(navController: NavHostController) {
             CharacterDetailScreen(characterId = characterId)
         }
         composable("character_list") {
-            CharacterListScreen()
+            CharacterListScreen(navController = navController)
         }
     }
 }

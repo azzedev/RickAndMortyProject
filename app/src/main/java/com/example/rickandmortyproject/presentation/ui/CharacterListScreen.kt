@@ -3,6 +3,7 @@ package com.example.rickandmortyproject.presentation.ui
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -41,12 +42,13 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.rickandmortyproject.ui.theme.RickAndMortyProjectTheme
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CharacterListScreen(viewModel: CharacterViewModel = viewModel()) {
+fun CharacterListScreen(navController: NavController, viewModel: CharacterViewModel = viewModel()) {
     val characters = viewModel.charactersList.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
 
@@ -92,6 +94,9 @@ fun CharacterListScreen(viewModel: CharacterViewModel = viewModel()) {
                     }
                     Column(
                         modifier = Modifier.padding(8.dp)
+                            .clickable {
+                                navController.navigate("character_detail/${character.id}")
+                            }
                     ) {
                         Image(
                             painter = rememberAsyncImagePainter(character.image),

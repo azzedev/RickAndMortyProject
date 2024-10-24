@@ -11,31 +11,32 @@ import coil.compose.AsyncImage
 import com.example.rickandmortyproject.presentation.viewmodel.CharacterViewModel
 
 @Composable
-fun CharacterDetailScreen(viewModel: CharacterViewModel = viewModel(), characterId: Int) {
-
+fun CharacterDetailScreen(characterId: Int, viewModel: CharacterViewModel = viewModel()) {
     val character by viewModel.character.collectAsState()
 
     LaunchedEffect(key1 = characterId) {
-        println("Lancement de fetchCharacterById avec l'ID : $characterId")
         viewModel.fetchCharacterById(characterId)
     }
 
     character?.let { char ->
-        println("Affichage des détails du personnage : ${char.name}")
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
         ) {
-            Text(text = "Name: ${char.name}", style = MaterialTheme.typography.headlineSmall)
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(text = "Status: ${char.status}")
-            Spacer(modifier = Modifier.height(8.dp))
             AsyncImage(
                 model = char.image,
                 contentDescription = char.name,
                 modifier = Modifier.size(200.dp)
             )
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(text = "Name: ${char.name}", style = MaterialTheme.typography.headlineSmall)
+            Text(text = "Status: ${char.status}", style = MaterialTheme.typography.bodyLarge)
+            Text(text = "Species: ${char.species}", style = MaterialTheme.typography.bodyLarge)
+            Text(text = "Type: ${char.type}", style = MaterialTheme.typography.bodyLarge)
+            Text(text = "Gender: ${char.gender}", style = MaterialTheme.typography.bodyLarge)
+            Text(text = "Origin: ${char.origin.name}", style = MaterialTheme.typography.bodyLarge)
+            Text(text = "Location: ${char.location.name}", style = MaterialTheme.typography.bodyLarge)
         }
     } ?: run {
         Text(text = "Loading...", modifier = Modifier.padding(16.dp))
