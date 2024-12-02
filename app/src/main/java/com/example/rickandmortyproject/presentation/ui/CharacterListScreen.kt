@@ -40,6 +40,7 @@ import androidx.compose.ui.res.painterResource
 import com.example.rickandmortyproject.R
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -51,6 +52,7 @@ import com.example.rickandmortyproject.ui.theme.RickAndMortyProjectTheme
 fun CharacterListScreen(navController: NavController, viewModel: CharacterViewModel = viewModel()) {
     val characters = viewModel.charactersList.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
+    val errorMessage by viewModel.errorMessageCharacterList.collectAsState()
 
 
     LaunchedEffect(Unit) {
@@ -72,56 +74,71 @@ fun CharacterListScreen(navController: NavController, viewModel: CharacterViewMo
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Dropdown Row Layout
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(2.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp)
-        ) {
-
-
-            // Lazy Grid for Characters
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(2),
+        if (errorMessage != null) {
+            // Afficher le message d'erreur personnalisé
+            Text(
+                text = errorMessage ?: "",
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center,
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(8.dp)
+                    .fillMaxWidth()
+                    .padding(16.dp)
+            )
+        } else {
+
+            // Dropdown Row Layout
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(2.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
             ) {
-                itemsIndexed(characters.value) { index, character ->
-                    if (index >= characters.value.size - 2 && !isLoading) {
-                        viewModel.loadNextPage()
-                    }
-                    Column(
-                        modifier = Modifier.padding(8.dp)
-                            .clickable {
-                                navController.navigate("character_detail/${character.id}")
-                            }
-                    ) {
-                        Image(
-                            painter = rememberAsyncImagePainter(character.image),
-                            contentDescription = character.name,
-                            modifier = Modifier
-                                .size(150.dp)
-                                .border(2.dp, MaterialTheme.colorScheme.primary)
-                        )
-                        Spacer(modifier = Modifier.height(2.dp))
-                        Text(
-                            text = character.name,
-                            style = MaterialTheme.typography.titleMedium,
-                            modifier = Modifier.align(Alignment.CenterHorizontally)
-                        )
-                    }
-                }
-                if (isLoading) {
-                    item {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(16.dp),
-                            contentAlignment = Alignment.Center
+
+
+                // Lazy Grid for Characters
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(2),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(8.dp)
+                ) {
+                    itemsIndexed(characters.value) { index, character ->
+                        if (index >= characters.value.size - 2 && !isLoading) {
+                            viewModel.loadNextPage()
+                        }
+                        Column(
+                            modifier = Modifier.padding(8.dp)
+                                .clickable {
+                                    navController.navigate("character_detail/${character.id}")
+                                }
                         ) {
-                            CircularProgressIndicator()
+                            Image(
+                                painter = rememberAsyncImagePainter(character.image),
+                                contentDescription = character.name,
+                                modifier = Modifier
+                                    .size(150.dp)
+                                    .border(2.dp, MaterialTheme.colorScheme.primary)
+                            )
+                            Spacer(modifier = Modifier.height(2.dp))
+                            Text(
+                                text = character.name,
+                                style = MaterialTheme.typography.titleMedium,
+                                modifier = Modifier.align(Alignment.CenterHorizontally)
+                            )
+                        }
+                    }
+                    if (isLoading) {
+                        item {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(16.dp),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                CircularProgressIndicator()
+                            }
                         }
                     }
                 }
